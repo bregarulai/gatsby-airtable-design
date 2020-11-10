@@ -15,10 +15,25 @@ const query = graphql`
   }
 `
 
-const Background = () => {
-  const data = useStaticQuery(query)
+const Background = ({ children }) => {
+  const {
+    file: {
+      childImageSharp: { fluid },
+    },
+  } = useStaticQuery(query)
 
-  return <h2>background image component</h2>
+  return (
+    <Wrapper>
+      <BackgroundImage
+        Tag="div"
+        fluid={fluid}
+        className="bcg"
+        preserveStackingContext={true}
+      >
+        {children}
+      </BackgroundImage>
+    </Wrapper>
+  )
 }
 
 const fadeIn = keyframes`
