@@ -6,7 +6,32 @@ import Image from "gatsby-image"
 import { FaQuoteRight } from "react-icons/fa"
 import { FiChevronRight, FiChevronLeft } from "react-icons/fi"
 
+const query = graphql`
+  {
+    allAirtable(filter: { table: { eq: "Customers" } }) {
+      nodes {
+        id
+        data {
+          name
+          quote
+          title
+          image {
+            localFiles {
+              childImageSharp {
+                fixed {
+                  ...GatsbyImageSharpFixed
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`
+
 const Slider = () => {
+  const data = useStaticQuery(query)
   return <h2>slider component</h2>
 }
 
