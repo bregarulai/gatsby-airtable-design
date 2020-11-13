@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { graphql, useStaticQuery } from "gatsby"
 import Title from "./Title"
 import styled from "styled-components"
@@ -36,6 +36,16 @@ const Slider = () => {
   } = useStaticQuery(query)
   const [index, setIndex] = useState(0)
 
+  useEffect(() => {
+    const lastIndex = customers.length - 1
+    if (index < 0) {
+      setIndex(lastIndex)
+    }
+    if (index > lastIndex) {
+      setIndex(0)
+    }
+  }, [index, customers])
+
   return (
     <Wrapper className="section">
       <Title title="reviews" />
@@ -50,6 +60,12 @@ const Slider = () => {
           if (customerIndex === index) {
             position = "activeSlide"
           }
+          if (
+            customerIndex === index - 1 ||
+            (index === 0 && customerIndex === customers.length - 1)
+          ) {
+            position = "lastSlide"
+          }
 
           return (
             <article key={customer.id} className={position}>
@@ -61,6 +77,12 @@ const Slider = () => {
             </article>
           )
         })}
+        <button className="prev" onClick={() => setIndex(index - 1)}>
+          <FiChevronLeft />
+        </button>
+        <button className="next" onClick={() => setIndex(index + 1)}>
+          <FiChevronRight />
+        </button>
       </div>
     </Wrapper>
   )
