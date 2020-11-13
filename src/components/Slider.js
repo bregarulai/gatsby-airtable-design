@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { graphql, useStaticQuery } from "gatsby"
 import Title from "./Title"
 import styled from "styled-components"
@@ -18,7 +18,7 @@ const query = graphql`
           image {
             localFiles {
               childImageSharp {
-                fixed {
+                fixed(width: 150, height: 150) {
                   ...GatsbyImageSharpFixed
                 }
               }
@@ -31,8 +31,39 @@ const query = graphql`
 `
 
 const Slider = () => {
-  const data = useStaticQuery(query)
-  return <h2>slider component</h2>
+  const {
+    allAirtable: { nodes: customers },
+  } = useStaticQuery(query)
+  const [index, setIndex] = useState(0)
+
+  return (
+    <Wrapper className="section">
+      <Title title="reviews" />
+      <div className="section-center">
+        {customers.map((customer, customerIndex) => {
+          const {
+            data: { name, quote, title, image },
+          } = customer
+          const customerImg = image.localFiles[0].childImageSharp.fixed
+          let position = "nextSlide"
+
+          if (customerIndex === index) {
+            position = "activeSlide"
+          }
+
+          return (
+            <article key={customer.id} className={position}>
+              <Image fixed={customerImg} className="img" />
+              <h4>{name}</h4>
+              <p className="title">{title}</p>
+              <p className="text">{quote}</p>
+              <FaQuoteRight className="icon" />
+            </article>
+          )
+        })}
+      </div>
+    </Wrapper>
+  )
 }
 
 const Wrapper = styled.div`
