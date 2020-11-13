@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import Background from "./Background"
 import styled from "styled-components"
 import { Link } from "gatsby"
-import { FiChevronRight, FiChevronLeft, FiChevronsRight } from "react-icons/fi"
+import { FiChevronRight, FiChevronLeft } from "react-icons/fi"
 const Hero = ({ projects }) => {
   const images = projects.map(item => {
     const {
@@ -40,6 +40,17 @@ const Hero = ({ projects }) => {
         <button className="next-btn" onClick={() => setIndex(index + 1)}>
           <FiChevronRight />
         </button>
+        <div className="dots">
+          {images.map((_, btnIndex) => {
+            return (
+              <span
+                onClick={() => setIndex(btnIndex)}
+                key={btnIndex}
+                className={index === btnIndex ? "active" : undefined}
+              ></span>
+            )
+          })}
+        </div>
       </Background>
     </Wrapper>
   )
