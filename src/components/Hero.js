@@ -1,12 +1,24 @@
-import React from "react"
+import React, { useState } from "react"
 import Background from "./Background"
 import styled from "styled-components"
 import { Link } from "gatsby"
 import { FiChevronRight, FiChevronLeft } from "react-icons/fi"
-const Hero = () => {
+const Hero = ({ projects }) => {
+  const images = projects.map(item => {
+    const {
+      data: {
+        image: { localFiles },
+      },
+    } = item
+    const image = localFiles[0].childImageSharp.fluid
+    return image
+  })
+
+  const [index, setIndex] = useState(0)
+
   return (
     <Wrapper>
-      <Background>
+      <Background image={images[0]}>
         <article>
           <h3>If you can dream it, we can create it</h3>
           <h1>Let your home be unique and stylish</h1>
